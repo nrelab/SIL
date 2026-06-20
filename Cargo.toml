@@ -1,0 +1,10 @@
+[workspace]
+members = [
+    "crates/sil-normalizer",
+    "crates/sil-confusable",
+    "crates/sil-semantic",
+    "crates/sil-policy",
+    "crates/sil-cli"
+]
+
+resolver = "2"
