@@ -1,0 +1,20 @@
+#!/bin/bash
+
+echo "🔍 SIL Pre-Commit Scan Running..."
+
+FILES=$(git diff --cached --name-only)
+
+for file in $FILES
+do
+    if [ -f "$file" ]; then
+        RESULT=$(sil-cli --input "$(cat "$file")" 2>&1)
+        echo "$RESULT" | grep -q "BLOCKED"
+        if [ $? -eq 0 ]; then
+            echo "❌ Commit BLOCKED by SIL Security Layer"
+            exit 1
+        fi
+    fi
+done
+
+echo "✅ SIL Scan Passed"
+exit 0

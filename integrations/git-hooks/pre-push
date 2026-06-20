@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo "🚀 SIL Pre-Push Deep Scan..."
+
+sil-cli --scan-repo .
+
+if [ $? -ne 0 ]; then
+    echo "❌ Push blocked: SIL detected risk"
+    exit 1
+fi
+
+echo "✅ Push allowed"
