@@ -1,0 +1,11 @@
+[package]
+name = "sil-cli"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+sil-normalizer = { path = "../sil-normalizer" }
+sil-confusable = { path = "../sil-confusable" }
+sil-semantic = { path = "../sil-semantic" }
+sil-policy = { path = "../sil-policy" }
+clap = { version = "4", features = ["derive"] }
