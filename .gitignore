@@ -1,0 +1,65 @@
+# --- Rust ---
+target/
+**/*.rs.bk
+
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+*.pyz
+*.whl
+pip-wheel-metadata/
+.ruff_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.coverage
+htmlcov/
+coverage/
+
+# --- Node / Dashboard ---
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# --- Secrets ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# --- Terraform ---
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+.directory
+
+# --- IDE ---
+.vscode/settings.json
+.vscode/*.log
+.history/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Misc ---
+*.log
+*.orig
+*.prof
+.envrc
