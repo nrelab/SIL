@@ -1,0 +1,27 @@
+name: SIL Security Scan
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  sil_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install SIL CLI
+        run: cargo install --path crates/sil-cli
+
+      - name: Run Scan
+        run: sil-cli --scan-repo . 2>&1 | tee report.txt
+
+      - name: Fail on Risk
+        run: |
+          if grep -q "BLOCKED" report.txt; then
+            echo "❌ SIL detected blocked content"
+            exit 1
+          fi
+          echo "✅ SIL scan passed"

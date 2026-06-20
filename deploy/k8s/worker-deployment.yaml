@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sil-worker
+  labels:
+    app: sil
+    tier: worker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sil
+      tier: worker
+  template:
+    metadata:
+      labels:
+        app: sil
+        tier: worker
+    spec:
+      containers:
+        - name: worker
+          image: sil/worker:latest
+          env:
+            - name: REDIS_HOST
+              value: sil-redis
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi

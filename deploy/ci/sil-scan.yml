@@ -1,0 +1,33 @@
+name: SIL Security Scan
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+  push:
+    branches: [main]
+
+jobs:
+  sil_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: SIL Scan
+        run: |
+          echo "🔍 SIL Security Scan Running..."
+
+          # Detect confusable characters
+          if grep -rPn '[ƒраеос]' --include='*.rs' --include='*.py' --include='*.js' --include='*.ts' . 2>/dev/null; then
+            echo "❌ BLOCKED: Confusable Unicode characters detected"
+            exit 1
+          fi
+
+          # Detect zero-width characters
+          if grep -rPn '\x{200B}|\x{200C}|\x{200D}|\x{FEFF}' . 2>/dev/null; then
+            echo "❌ BLOCKED: Zero-width characters detected"
+            exit 1
+          fi
+
+          echo "✅ SIL Scan Passed — No security risks"

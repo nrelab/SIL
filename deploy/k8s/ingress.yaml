@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sil-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rate-limit: "100r/s"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: api.sil.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sil-api
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - api.sil.io
+      secretName: sil-tls

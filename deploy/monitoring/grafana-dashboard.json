@@ -1,0 +1,44 @@
+{
+  "title": "SIL Core Dashboard",
+  "panels": [
+    {
+      "title": "Confusable Detection Rate",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "rate(sil_confusable_detections_total[5m])",
+          "legendFormat": "confusables/s"
+        }
+      ]
+    },
+    {
+      "title": "Blocked Commits",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "sil_blocked_commits_total"
+        }
+      ]
+    },
+    {
+      "title": "Semantic Drift Frequency",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "rate(semantic_drift_events_total[5m])",
+          "legendFormat": "drift/s"
+        }
+      ]
+    },
+    {
+      "title": "Repo Risk Score",
+      "type": "gauge",
+      "targets": [
+        {
+          "expr": "sil_repo_risk_score"
+        }
+      ],
+      "max": 1.0
+    }
+  ]
+}

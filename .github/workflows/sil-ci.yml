@@ -1,0 +1,108 @@
+name: SIL CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+  DOCKER_REGISTRY: ghcr.io
+  DOCKER_IMAGE_API: sil/api
+  DOCKER_IMAGE_WORKER: sil/worker
+
+jobs:
+  test:
+    name: Test & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - name: Cache Cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Rust Check
+        run: cargo check --workspace
+
+      - name: Rust Test
+        run: cargo test --workspace
+
+      - name: Clippy
+        run: cargo clippy --workspace -- -D warnings
+
+  scan:
+    name: SIL Self-Scan
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: SIL Scan
+        run: |
+          echo "Running SIL self-scan..."
+          # Scan for confusables, zero-width, etc.
+          grep -rPn '[ƒраео]' --include='*.rs' --include='*.py' --include='*.toml' . \
+            && echo "BLOCKED: Confusable characters found" && exit 1 \
+            || echo "PASSED: No confusable risks"
+
+  docker:
+    name: Build & Push Docker
+    runs-on: ubuntu-latest
+    needs: [scan]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build API
+        run: |
+          docker build -f deploy/docker/api/Dockerfile \
+            -t $DOCKER_REGISTRY/$DOCKER_IMAGE_API:${{ github.sha }} \
+            -t $DOCKER_REGISTRY/$DOCKER_IMAGE_API:latest .
+
+      - name: Build Worker
+        run: |
+          docker build -f deploy/docker/worker/Dockerfile \
+            -t $DOCKER_REGISTRY/$DOCKER_IMAGE_WORKER:${{ github.sha }} \
+            -t $DOCKER_REGISTRY/$DOCKER_IMAGE_WORKER:latest .
+
+      - name: Push Images
+        run: |
+          docker push $DOCKER_REGISTRY/$DOCKER_IMAGE_API --all-tags
+          docker push $DOCKER_REGISTRY/$DOCKER_IMAGE_WORKER --all-tags
+
+  deploy:
+    name: Deploy to K8s
+    runs-on: ubuntu-latest
+    needs: [docker]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Deploy
+        run: |
+          kubectl set image deployment/sil-api api=$DOCKER_REGISTRY/$DOCKER_IMAGE_API:${{ github.sha }}
+          kubectl set image deployment/sil-worker worker=$DOCKER_REGISTRY/$DOCKER_IMAGE_WORKER:${{ github.sha }}
+          kubectl rollout status deployment/sil-api
+          kubectl rollout status deployment/sil-worker

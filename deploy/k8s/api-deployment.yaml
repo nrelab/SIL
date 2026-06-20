@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sil-api
+  labels:
+    app: sil
+    tier: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sil
+      tier: api
+  template:
+    metadata:
+      labels:
+        app: sil
+        tier: api
+    spec:
+      containers:
+        - name: api
+          image: sil/api:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: REDIS_HOST
+              value: sil-redis
+            - name: POSTGRES_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: sil-db
+                  key: dsn
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
