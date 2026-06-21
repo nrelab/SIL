@@ -53,7 +53,7 @@ jobs:
         run: |
           echo "Running SIL self-scan..."
           # Scan for confusables, zero-width, etc.
-          grep -rPn '[ƒраео]' --include='*.rs' --include='*.py' --include='*.toml' . \
+          grep -rPn $'[\u0192\u0440\u0430\u0435\u043e]' --include='*.rs' --include='*.py' --include='*.toml' . \
             && echo "BLOCKED: Confusable characters found" && exit 1 \
             || echo "PASSED: No confusable risks"
 
