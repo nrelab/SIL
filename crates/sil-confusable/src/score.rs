@@ -1,5 +1,13 @@
 use crate::unicode_map::to_ascii_equivalent;
 
+/// Computes a confusable risk score for the input text.
+///
+/// Returns a value in `[0.0, 1.0]` based on weighted signals:
+/// - Multi-script mixing: 0.4
+/// - Similarity to known ASCII targets: 0.4
+/// - Obfuscation patterns (digit + letter mixing): 0.2
+///
+/// The score is clamped to a maximum of 1.0.
 #[must_use]
 pub fn confusable_score(input: &str) -> f32 {
     let mut score: f32 = 0.0;

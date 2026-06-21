@@ -1,6 +1,13 @@
 #![warn(clippy::pedantic)]
+#![doc = "Unicode normalization engine for the Semantic Integrity Layer."]
+#![doc = ""]
+#![doc = "Provides NFKC normalization, zero-width character filtering,"]
+#![doc = "and detection of suspicious Unicode patterns (Greek, Cyrillic)"]
+#![doc = "in input text."]
 
+/// Module for detecting suspicious Unicode patterns in text.
 pub mod detect;
+/// Module for normalizing Unicode input via NFKC and invisible character removal.
 pub mod normalize;
 
 pub use detect::scan_input;

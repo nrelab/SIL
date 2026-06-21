@@ -1,7 +1,14 @@
 #![warn(clippy::pedantic)]
+#![doc = "Policy evaluation engine for the Semantic Integrity Layer."]
+#![doc = ""]
+#![doc = "Provides risk scoring, threshold-based decision making,"]
+#![doc = "and automatic rewriting of repairable inputs."]
 
+/// Module defining the [`Decision`] enum.
 pub mod decision;
+/// Module implementing the policy evaluation logic.
 pub mod engine;
+/// Module defining risk input types and scoring functions.
 pub mod rules;
 
 pub use decision::Decision;

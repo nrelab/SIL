@@ -1,5 +1,11 @@
 use std::collections::HashSet;
 
+/// Computes a semantic similarity score between two strings using Jaccard similarity
+/// on underscore-delimited tokens.
+///
+/// Returns a value in `[0.0, 1.0]` where:
+/// - `1.0` indicates identical token sets
+/// - `0.0` indicates no overlapping tokens
 #[must_use]
 pub fn semantic_similarity(a: &str, b: &str) -> f32 {
     jaccard_like_score(a, b)

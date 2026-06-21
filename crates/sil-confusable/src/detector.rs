@@ -1,5 +1,13 @@
 use crate::unicode_map::to_ascii_equivalent;
 
+/// Detects confusable Unicode patterns in input text.
+///
+/// Returns a list of flag strings:
+/// - `VISUAL_MISMATCH_DETECTED` — input differs from its ASCII equivalent
+/// - `CROSS_SCRIPT_MIXING` — multiple scripts detected (e.g., Latin + Cyrillic)
+/// - `POTENTIAL_IMPERSONATION` — input resolves to a known target domain after normalization
+///
+/// Returns an empty `Vec` if no confusable patterns are found.
 #[must_use]
 pub fn detect_confusables(input: &str) -> Vec<String> {
     let mut flags = vec![];

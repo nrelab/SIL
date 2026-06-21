@@ -1,6 +1,12 @@
 #![warn(clippy::pedantic)]
+#![doc = "Semantic analysis engine for the Semantic Integrity Layer."]
+#![doc = ""]
+#![doc = "Provides Jaccard-based similarity scoring and keyword-based"]
+#![doc = "intent clustering for code and text analysis."]
 
+/// Module for clustering intent strings into named groups.
 pub mod cluster;
+/// Module for computing semantic similarity between strings.
 pub mod similarity;
 
 pub use cluster::cluster_intents;

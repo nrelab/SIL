@@ -1,7 +1,15 @@
 #![warn(clippy::pedantic)]
+#![doc = "Confusable detection engine for the Semantic Integrity Layer."]
+#![doc = ""]
+#![doc = "Detects homoglyph attacks, cross-script mixing, and potential"]
+#![doc = "impersonation of well-known targets using a configurable"]
+#![doc = "Unicode-to-ASCII mapping table."]
 
+/// Module for detecting confusable Unicode patterns in text.
 pub mod detector;
+/// Module for computing a confusable risk score.
 pub mod score;
+/// Module providing Unicode-to-ASCII character mapping.
 pub mod unicode_map;
 
 pub use detector::detect_confusables;
