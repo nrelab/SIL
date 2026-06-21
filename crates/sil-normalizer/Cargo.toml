@@ -2,6 +2,13 @@
 name = "sil-normalizer"
 version = "0.1.0"
 edition = "2024"
+description = "Unicode normalization engine for the Semantic Integrity Layer — NFKC normalization and zero-width character filtering"
+license = "MIT"
+repository = "https://github.com/nrelab/SIL"
+homepage = "https://github.com/nrelab/SIL"
+documentation = "https://docs.rs/sil-normalizer"
+categories = ["text-processing", "security"]
+keywords = ["unicode", "normalization", "security", "nfkc", "zero-width"]
 
 [dependencies]
 unicode-normalization = "0.1"

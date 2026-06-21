@@ -2,10 +2,17 @@
 name = "sil-cli"
 version = "0.1.0"
 edition = "2021"
+description = "CLI for the Semantic Integrity Layer — scan input for Unicode spoofing, confusable attacks, and semantic drift"
+license = "MIT"
+repository = "https://github.com/nrelab/SIL"
+homepage = "https://github.com/nrelab/SIL"
+documentation = "https://docs.rs/sil-cli"
+categories = ["command-line-utilities", "security"]
+keywords = ["cli", "unicode", "security", "spoofing", "semantic"]
 
 [dependencies]
-sil-normalizer = { path = "../sil-normalizer" }
-sil-confusable = { path = "../sil-confusable" }
-sil-semantic = { path = "../sil-semantic" }
-sil-policy = { path = "../sil-policy" }
+sil-normalizer = "0.1"
+sil-confusable = "0.1"
+sil-semantic = "0.1"
+sil-policy = "0.1"
 clap = { version = "4", features = ["derive"] }

@@ -8,3 +8,9 @@ members = [
 ]
 
 resolver = "2"
+
+[patch.crates-io]
+sil-normalizer = { path = "crates/sil-normalizer" }
+sil-confusable = { path = "crates/sil-confusable" }
+sil-semantic = { path = "crates/sil-semantic" }
+sil-policy = { path = "crates/sil-policy" }

@@ -2,5 +2,12 @@
 name = "sil-confusable"
 version = "0.1.0"
 edition = "2024"
+description = "Confusable detection engine for the Semantic Integrity Layer — homoglyph detection and cross-script mixing analysis"
+license = "MIT"
+repository = "https://github.com/nrelab/SIL"
+homepage = "https://github.com/nrelab/SIL"
+documentation = "https://docs.rs/sil-confusable"
+categories = ["text-processing", "security"]
+keywords = ["confusable", "homoglyph", "unicode", "security", "detection"]
 
 [dependencies]

@@ -2,5 +2,12 @@
 name = "sil-semantic"
 version = "0.1.0"
 edition = "2024"
+description = "Semantic analysis engine for the Semantic Integrity Layer — Jaccard similarity and intent clustering"
+license = "MIT"
+repository = "https://github.com/nrelab/SIL"
+homepage = "https://github.com/nrelab/SIL"
+documentation = "https://docs.rs/sil-semantic"
+categories = ["text-processing", "security"]
+keywords = ["semantic", "similarity", "jaccard", "clustering", "security"]
 
 [dependencies]
