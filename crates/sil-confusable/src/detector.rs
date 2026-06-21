@@ -1,5 +1,6 @@
 use crate::unicode_map::to_ascii_equivalent;
 
+#[must_use]
 pub fn detect_confusables(input: &str) -> Vec<String> {
     let mut flags = vec![];
 
@@ -35,7 +36,7 @@ fn has_cross_script_mix(input: &str) -> bool {
         }
     }
 
-    (has_latin && has_cyrillic) || (has_latin && has_greek) || (has_cyrillic && has_greek)
+    (has_greek || has_cyrillic) && has_latin || (has_cyrillic && has_greek)
 }
 
 fn looks_like_common_target(input: &str) -> bool {

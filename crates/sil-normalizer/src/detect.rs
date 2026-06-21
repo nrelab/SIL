@@ -1,3 +1,4 @@
+#[must_use]
 pub fn scan_input(input: &str) -> Vec<String> {
     let mut issues = vec![];
 
@@ -21,7 +22,7 @@ fn contains_zero_width(input: &str) -> bool {
 fn contains_suspicious_unicode(input: &str) -> bool {
     input.chars().any(|c| {
         let code = c as u32;
-        (code >= 0x0370 && code <= 0x03FF) || // Greek
-        (code >= 0x0400 && code <= 0x04FF) // Cyrillic
+        (0x0370..=0x03FF).contains(&code) || // Greek
+        (0x0400..=0x04FF).contains(&code) // Cyrillic
     })
 }

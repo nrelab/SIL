@@ -19,7 +19,7 @@ mod tests {
             confusable_risk: 0.1,
             semantic_risk: 0.1,
         };
-        assert_eq!(evaluate(input, "hello"), Decision::Allow);
+        assert_eq!(evaluate(&input, "hello"), Decision::Allow);
     }
 
     #[test]
@@ -29,7 +29,7 @@ mod tests {
             confusable_risk: 0.7,
             semantic_risk: 0.0,
         };
-        let decision = evaluate(input, "userdev");
+        let decision = evaluate(&input, "userdev");
         assert!(matches!(decision, Decision::Warn));
     }
 
@@ -40,7 +40,7 @@ mod tests {
             confusable_risk: 0.9,
             semantic_risk: 0.5,
         };
-        assert_eq!(evaluate(input, "раypal"), Decision::Block);
+        assert_eq!(evaluate(&input, "раypal"), Decision::Block);
     }
 
     #[test]
@@ -50,7 +50,7 @@ mod tests {
             confusable_risk: 0.1,
             semantic_risk: 0.1,
         };
-        let decision = evaluate(input, "ƒdev");
+        let decision = evaluate(&input, "\u{0192}dev");
         assert_eq!(decision, Decision::Rewrite("fdev".to_string()));
     }
 
@@ -61,7 +61,7 @@ mod tests {
             confusable_risk: 1.0,
             semantic_risk: 1.0,
         };
-        let score = rules::evaluate_risk(input);
+        let score = rules::evaluate_risk(&input);
         assert!(score > 0.8);
     }
 
@@ -72,7 +72,7 @@ mod tests {
             confusable_risk: 0.0,
             semantic_risk: 0.0,
         };
-        let score = rules::evaluate_risk(input);
+        let score = rules::evaluate_risk(&input);
         assert_eq!(score, 0.4);
     }
 }

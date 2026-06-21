@@ -1,5 +1,6 @@
 use unicode_normalization::UnicodeNormalization;
 
+#[must_use]
 pub fn normalize_input(input: &str) -> String {
     let nfkc: String = input.nfkc().collect();
 

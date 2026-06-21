@@ -1,5 +1,6 @@
 use crate::unicode_map::to_ascii_equivalent;
 
+#[must_use]
 pub fn confusable_score(input: &str) -> f32 {
     let mut score: f32 = 0.0;
 
@@ -88,10 +89,10 @@ fn levenshtein_distance(a: &str, b: &str) -> usize {
     let mut prev: Vec<usize> = (0..=b_len).collect();
     let mut curr: Vec<usize> = vec![0; b_len + 1];
 
-    for i in 0..a_len {
+    for (i, a_char) in a.iter().enumerate().take(a_len) {
         curr[0] = i + 1;
-        for j in 0..b_len {
-            let cost = if a[i] == b[j] { 0 } else { 1 };
+        for (j, b_char) in b.iter().enumerate().take(b_len) {
+            let cost = usize::from(a_char != b_char);
             curr[j + 1] = (curr[j] + 1).min(prev[j + 1] + 1).min(prev[j] + cost);
         }
         (prev, curr) = (curr, prev);

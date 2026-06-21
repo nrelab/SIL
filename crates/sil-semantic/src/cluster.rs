@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+#[must_use]
 pub fn cluster_intents(items: Vec<&str>) -> HashMap<String, Vec<String>> {
     let mut clusters: HashMap<String, Vec<String>> = HashMap::new();
 

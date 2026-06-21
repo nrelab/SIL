@@ -1,7 +1,8 @@
 use crate::decision::Decision;
 use crate::rules::{RiskInput, evaluate_risk};
 
-pub fn evaluate(input: RiskInput, original: &str) -> Decision {
+#[must_use]
+pub fn evaluate(input: &RiskInput, original: &str) -> Decision {
     let score = evaluate_risk(input);
 
     if score > 0.8 {
@@ -20,9 +21,9 @@ pub fn evaluate(input: RiskInput, original: &str) -> Decision {
 }
 
 fn contains_repairable_issue(input: &str) -> bool {
-    input.contains('\u{200B}') || input.contains("ƒ")
+    input.contains('\u{200B}') || input.contains('\u{0192}')
 }
 
 fn sanitize(input: &str) -> String {
-    input.replace('ƒ', "f")
+    input.replace('\u{0192}', "f")
 }

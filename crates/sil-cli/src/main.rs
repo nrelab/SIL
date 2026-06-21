@@ -23,10 +23,10 @@ fn main() {
 
     let risk = build_risk_input(&confusable_flags, semantic_score);
 
-    let decision = evaluate(risk, &args.input);
+    let decision = evaluate(&risk, &args.input);
 
     println!("INPUT      : {}", args.input);
-    println!("NORMALIZED : {}", normalized);
-    println!("FLAGS      : {:?}", confusable_flags);
+    println!("NORMALIZED : {normalized}");
+    println!("FLAGS      : {confusable_flags:?}");
     println!("DECISION   : {}", format_decision(&decision));
 }

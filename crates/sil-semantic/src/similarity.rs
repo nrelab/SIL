@@ -1,9 +1,11 @@
 use std::collections::HashSet;
 
+#[must_use]
 pub fn semantic_similarity(a: &str, b: &str) -> f32 {
     jaccard_like_score(a, b)
 }
 
+#[allow(clippy::cast_precision_loss)]
 fn jaccard_like_score(a: &str, b: &str) -> f32 {
     let set_a: HashSet<_> = a.split('_').collect();
     let set_b: HashSet<_> = b.split('_').collect();

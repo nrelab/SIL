@@ -4,6 +4,7 @@ pub struct RiskInput {
     pub semantic_risk: f32,
 }
 
-pub fn evaluate_risk(input: RiskInput) -> f32 {
+#[must_use]
+pub fn evaluate_risk(input: &RiskInput) -> f32 {
     (input.unicode_risk * 0.4) + (input.confusable_risk * 0.4) + (input.semantic_risk * 0.2)
 }

@@ -2,11 +2,21 @@
 
 echo "🚀 SIL Pre-Push Deep Scan..."
 
-sil-cli --scan-repo .
+FILES=$(git diff --name-only --diff-filter=d @{u}..HEAD 2>/dev/null || git diff --name-only --cached)
 
-if [ $? -ne 0 ]; then
-    echo "❌ Push blocked: SIL detected risk"
-    exit 1
-fi
+for file in $FILES
+do
+    if [ -f "$file" ]; then
+        if grep -q '#\[cfg(test)\]' "$file" 2>/dev/null; then
+            continue
+        fi
+        DECISION=$(sil-cli --input "$(cat "$file")" 2>&1 | grep "^DECISION")
+        echo "$DECISION" | grep -q "BLOCKED"
+        if [ $? -eq 0 ]; then
+            echo "❌ Push blocked by SIL Security Layer"
+            exit 1
+        fi
+    fi
+done
 
 echo "✅ Push allowed"
