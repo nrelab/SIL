@@ -40,7 +40,7 @@ mod tests {
             confusable_risk: 0.9,
             semantic_risk: 0.5,
         };
-        assert_eq!(evaluate(&input, "раypal"), Decision::Block);
+        assert_eq!(evaluate(&input, "\u{0440}\u{0430}ypal"), Decision::Block);
     }
 
     #[test]

@@ -1,7 +1,7 @@
 def analyze_pr(diff_text: str) -> dict:
     issues: list[str] = []
 
-    if "ƒ" in diff_text:
+    if "\u0192" in diff_text:
         issues.append("UNICODE_CONFUSABLE_RISK")
 
     if "\u200b" in diff_text:
@@ -16,5 +16,5 @@ def analyze_pr(diff_text: str) -> dict:
 
 
 if __name__ == "__main__":
-    result = analyze_pr("add ƒlogin auth handler")
+    result = analyze_pr("add \u0192login auth handler")
     print(result)

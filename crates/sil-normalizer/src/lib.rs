@@ -25,7 +25,7 @@ mod tests {
 
     #[test]
     fn test_scan_detects_suspicious_unicode() {
-        let input = "раypal";
+        let input = "\u{0440}\u{0430}ypal";
         let issues = scan_input(input);
         assert!(issues.contains(&"SUSPICIOUS_UNICODE_PATTERN".to_string()));
     }

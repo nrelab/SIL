@@ -12,7 +12,7 @@ def run_sil_pipeline(text: str) -> dict:
 
     # Step 2: Confusable detection
     flags: list[str] = []
-    if "ра" in text or "ƒ" in text:
+    if "\u0440\u0430" in text or "\u0192" in text:
         flags.append("VISUAL_MISMATCH_DETECTED")
     if any(ord(c) > 0x7F for c in text):
         flags.append("CROSS_SCRIPT_MIXING")
@@ -21,9 +21,9 @@ def run_sil_pipeline(text: str) -> dict:
     semantic_score = 0.6
 
     # Step 4: Policy decision
-    if "ƒ" in text:
+    if "\u0192" in text:
         decision = "REWRITE"
-        normalized = text.replace("ƒ", "f")
+        normalized = text.replace("\u0192", "f")
     elif any("\u0400" <= c <= "\u04FF" for c in text):
         decision = "BLOCK"
     else:

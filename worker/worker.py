@@ -16,9 +16,9 @@ def process_job(job: dict) -> dict:
     flags = []
     decision = "ALLOW"
 
-    if "ƒ" in text:
+    if "\u0192" in text:
         flags.append("CONFUSABLE_DETECTED")
-        normalized = text.replace("ƒ", "f")
+        normalized = text.replace("\u0192", "f")
         decision = "BLOCK"
 
     if "\u200b" in text:
