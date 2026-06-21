@@ -135,6 +135,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "sil"
+version = "0.1.0"
+dependencies = [
+ "sil-confusable",
+ "sil-normalizer",
+ "sil-policy",
+ "sil-semantic",
+]
+
+[[package]]
 name = "sil-cli"
 version = "0.1.0"
 dependencies = [

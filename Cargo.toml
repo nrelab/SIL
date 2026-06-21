@@ -4,6 +4,7 @@ members = [
     "crates/sil-confusable",
     "crates/sil-semantic",
     "crates/sil-policy",
+    "crates/sil",
     "crates/sil-cli"
 ]
 
@@ -14,3 +15,4 @@ sil-normalizer = { path = "crates/sil-normalizer" }
 sil-confusable = { path = "crates/sil-confusable" }
 sil-semantic = { path = "crates/sil-semantic" }
 sil-policy = { path = "crates/sil-policy" }
+sil = { path = "crates/sil" }

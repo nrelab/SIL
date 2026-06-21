@@ -1,0 +1,17 @@
+[package]
+name = "sil"
+version = "0.1.0"
+edition = "2021"
+description = "Unified crate for the Semantic Integrity Layer — Unicode spoofing, confusable attacks, and semantic drift detection"
+license = "MIT"
+repository = "https://github.com/nrelab/SIL"
+homepage = "https://github.com/nrelab/SIL"
+documentation = "https://docs.rs/sil"
+categories = ["text-processing", "security"]
+keywords = ["unicode", "security", "spoofing", "confusable", "semantic"]
+
+[dependencies]
+sil-normalizer = "0.1"
+sil-confusable = "0.1"
+sil-semantic = "0.1"
+sil-policy = "0.1"
