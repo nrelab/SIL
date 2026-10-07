@@ -35,5 +35,5 @@ fn contains_repairable_issue(input: &str) -> bool {
 }
 
 fn sanitize(input: &str) -> String {
-    input.replace('\u{0192}', "f")
+    input.replace('\u{0192}', "f").replace('\u{200B}', "")
 }

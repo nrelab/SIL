@@ -1,3 +1,4 @@
+use crate::targets::COMMON_TARGETS;
 use crate::unicode_map::to_ascii_equivalent;
 
 /// Detects confusable Unicode patterns in input text.
@@ -49,17 +50,5 @@ fn has_cross_script_mix(input: &str) -> bool {
 
 fn looks_like_common_target(input: &str) -> bool {
     let normalized = to_ascii_equivalent(input).to_lowercase();
-    let targets = [
-        "paypal",
-        "google",
-        "facebook",
-        "amazon",
-        "apple",
-        "microsoft",
-        "netflix",
-        "github",
-        "gmail",
-        "whatsapp",
-    ];
-    targets.contains(&normalized.as_str())
+    COMMON_TARGETS.contains(&normalized.as_str())
 }

@@ -1,3 +1,4 @@
+use crate::targets::COMMON_TARGETS;
 use crate::unicode_map::to_ascii_equivalent;
 
 /// Computes a confusable risk score for the input text.
@@ -46,21 +47,8 @@ fn contains_multiple_scripts(input: &str) -> bool {
 
 fn has_similar_ascii_target(input: &str) -> bool {
     let normalized = to_ascii_equivalent(input);
-    let targets = [
-        "paypal",
-        "google",
-        "facebook",
-        "amazon",
-        "apple",
-        "microsoft",
-        "netflix",
-        "github",
-        "gmail",
-        "whatsapp",
-    ];
-
     let lower = normalized.to_lowercase();
-    targets.iter().any(|t| {
+    COMMON_TARGETS.iter().any(|t| {
         let dist = levenshtein_distance(&lower, t);
         dist <= 2 && dist > 0
     })
