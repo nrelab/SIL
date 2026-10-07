@@ -13,6 +13,5 @@ keywords = ["cli", "unicode", "security", "spoofing", "semantic"]
 [dependencies]
 sil-normalizer = "0.1"
 sil-confusable = "0.1"
-sil-semantic = "0.1"
 sil-policy = "0.1"
 clap = { version = "4", features = ["derive"] }

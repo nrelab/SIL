@@ -152,7 +152,6 @@ dependencies = [
  "sil-confusable",
  "sil-normalizer",
  "sil-policy",
- "sil-semantic",
 ]
 
 [[package]]

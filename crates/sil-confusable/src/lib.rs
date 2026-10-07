@@ -11,6 +11,8 @@ pub mod detector;
 pub mod score;
 /// Module providing Unicode-to-ASCII character mapping.
 pub mod unicode_map;
+/// Module defining well-known impersonation target names.
+pub mod targets;
 
 pub use detector::detect_confusables;
 pub use score::confusable_score;

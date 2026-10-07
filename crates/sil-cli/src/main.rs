@@ -19,9 +19,7 @@ fn main() {
 
     let normalized = sil_normalizer::normalize_input(&args.input);
     let confusable_flags = sil_confusable::detect_confusables(&args.input);
-    let semantic_score = sil_semantic::semantic_similarity(&args.input, "reference");
-
-    let risk = build_risk_input(&confusable_flags, semantic_score);
+    let risk = build_risk_input(&confusable_flags);
 
     let decision = evaluate(&risk, &args.input);
 
