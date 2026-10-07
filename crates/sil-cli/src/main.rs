@@ -14,17 +14,19 @@ struct Args {
     input: String,
 }
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
 
-    let normalized = sil_normalizer::normalize_input(&args.input);
-    let confusable_flags = sil_confusable::detect_confusables(&args.input);
+    let normalized = sil_normalizer::normalize_input(&args.input)?;
+    let confusable_flags = sil_confusable::detect_confusables(&args.input)?;
     let risk = build_risk_input(&confusable_flags);
 
-    let decision = evaluate(&risk, &args.input);
+    let decision = evaluate(&risk, &args.input)?;
 
     println!("INPUT      : {}", args.input);
     println!("NORMALIZED : {normalized}");
     println!("FLAGS      : {confusable_flags:?}");
     println!("DECISION   : {}", format_decision(&decision));
+
+    Ok(())
 }

@@ -6,10 +6,13 @@
 
 /// Module for clustering intent strings into named groups.
 pub mod cluster;
+/// Module for semantic analysis error types.
+pub mod error;
 /// Module for computing semantic similarity between strings.
 pub mod similarity;
 
 pub use cluster::cluster_intents;
+pub use error::SemanticError;
 pub use similarity::semantic_similarity;
 
 #[cfg(test)]
@@ -18,21 +21,29 @@ mod tests {
 
     #[test]
     fn test_similarity_related() {
-        let score = semantic_similarity("login_user", "authenticate_user");
+        let score = semantic_similarity("login_user", "authenticate_user").unwrap();
         assert!(score > 0.0);
         assert!(score <= 1.0);
     }
 
     #[test]
     fn test_similarity_identical() {
-        let score = semantic_similarity("login_user", "login_user");
+        let score = semantic_similarity("login_user", "login_user").unwrap();
         assert_eq!(score, 1.0);
     }
 
     #[test]
     fn test_similarity_unrelated() {
-        let score = semantic_similarity("login_user", "payment_process");
+        let score = semantic_similarity("login_user", "payment_process").unwrap();
         assert_eq!(score, 0.0);
+    }
+
+    #[test]
+    fn test_similarity_empty_is_error() {
+        assert_eq!(
+            semantic_similarity("", "authenticate_user"),
+            Err(SemanticError::EmptyInput)
+        );
     }
 
     #[test]

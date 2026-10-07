@@ -7,10 +7,13 @@
 
 /// Module for detecting suspicious Unicode patterns in text.
 pub mod detect;
+/// Module for normalization error types.
+pub mod error;
 /// Module for normalizing Unicode input via NFKC and invisible character removal.
 pub mod normalize;
 
 pub use detect::scan_input;
+pub use error::NormalizerError;
 pub use normalize::normalize_input;
 
 #[cfg(test)]
@@ -20,29 +23,35 @@ mod tests {
     #[test]
     fn test_normalize_removes_zero_width() {
         let input = "us\u{200B}er";
-        assert_eq!(normalize_input(input), "user");
+        assert_eq!(normalize_input(input).unwrap(), "user");
     }
 
     #[test]
     fn test_scan_detects_zero_width() {
         let input = "us\u{200B}er";
-        let issues = scan_input(input);
+        let issues = scan_input(input).unwrap();
         assert!(issues.contains(&"ZERO_WIDTH_CHARACTER_DETECTED".to_string()));
     }
 
     #[test]
     fn test_scan_detects_suspicious_unicode() {
         let input = "\u{0440}\u{0430}ypal";
-        let issues = scan_input(input);
+        let issues = scan_input(input).unwrap();
         assert!(issues.contains(&"SUSPICIOUS_UNICODE_PATTERN".to_string()));
     }
 
     #[test]
     fn test_clean_input_no_issues() {
         let input = "hello world";
-        let clean = normalize_input(input);
-        let issues = scan_input(input);
+        let clean = normalize_input(input).unwrap();
+        let issues = scan_input(input).unwrap();
         assert_eq!(clean, "hello world");
         assert!(issues.is_empty());
+    }
+
+    #[test]
+    fn test_empty_input_is_error() {
+        assert_eq!(normalize_input(""), Err(NormalizerError::EmptyInput));
+        assert_eq!(scan_input(""), Err(NormalizerError::EmptyInput));
     }
 }

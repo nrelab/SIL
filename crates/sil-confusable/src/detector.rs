@@ -1,3 +1,4 @@
+use crate::error::ConfusableError;
 use crate::targets::COMMON_TARGETS;
 use crate::unicode_map::to_ascii_equivalent;
 
@@ -9,8 +10,14 @@ use crate::unicode_map::to_ascii_equivalent;
 /// - `POTENTIAL_IMPERSONATION` — input resolves to a known target domain after normalization
 ///
 /// Returns an empty `Vec` if no confusable patterns are found.
-#[must_use]
-pub fn detect_confusables(input: &str) -> Vec<String> {
+///
+/// # Errors
+///
+/// Returns [`ConfusableError::EmptyInput`] if `input` is empty.
+pub fn detect_confusables(input: &str) -> Result<Vec<String>, ConfusableError> {
+    if input.is_empty() {
+        return Err(ConfusableError::EmptyInput);
+    }
     let mut flags = vec![];
 
     let normalized = to_ascii_equivalent(input);
@@ -27,7 +34,7 @@ pub fn detect_confusables(input: &str) -> Vec<String> {
         flags.push("POTENTIAL_IMPERSONATION".to_string());
     }
 
-    flags
+    Ok(flags)
 }
 
 fn has_cross_script_mix(input: &str) -> bool {

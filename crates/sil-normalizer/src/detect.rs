@@ -1,3 +1,5 @@
+use crate::error::NormalizerError;
+
 /// Scans input text for suspicious Unicode patterns.
 ///
 /// Returns a list of issue flag strings. Currently detects:
@@ -5,8 +7,14 @@
 /// - `SUSPICIOUS_UNICODE_PATTERN` — Greek (0x0370–0x03FF) or Cyrillic (0x0400–0x04FF) characters
 ///
 /// Returns an empty `Vec` if no issues are found.
-#[must_use]
-pub fn scan_input(input: &str) -> Vec<String> {
+///
+/// # Errors
+///
+/// Returns [`NormalizerError::EmptyInput`] if `input` is empty.
+pub fn scan_input(input: &str) -> Result<Vec<String>, NormalizerError> {
+    if input.is_empty() {
+        return Err(NormalizerError::EmptyInput);
+    }
     let mut issues = vec![];
 
     if contains_zero_width(input) {
@@ -17,7 +25,7 @@ pub fn scan_input(input: &str) -> Vec<String> {
         issues.push("SUSPICIOUS_UNICODE_PATTERN".to_string());
     }
 
-    issues
+    Ok(issues)
 }
 
 fn contains_zero_width(input: &str) -> bool {
