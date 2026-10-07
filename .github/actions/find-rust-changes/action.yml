@@ -14,13 +14,16 @@ runs:
       env:
         EVENT_NAME: ${{ github.event_name }}
         BASE_REF: ${{ github.base_ref }}
+        BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         BEFORE_SHA: ${{ github.event.before }}
         AFTER_SHA: ${{ github.event.after }}
       run: |
         if [ "$EVENT_NAME" = "pull_request" ]; then
-          git fetch origin "$BASE_REF"
-          BASE_COMMIT="origin/${BASE_REF}"
-          HEAD_COMMIT="HEAD"
+          BASE_COMMIT="$BASE_SHA"
+          HEAD_COMMIT="$HEAD_SHA"
+          # Ensure both revisions are available despite shallow checkout
+          git fetch origin "$BASE_COMMIT" "$HEAD_COMMIT"
         else
           BASE_COMMIT="$BEFORE_SHA"
           HEAD_COMMIT="$AFTER_SHA"
@@ -30,10 +33,17 @@ runs:
 
         RUST_PATHS=("crates/" "Cargo.toml" "Cargo.lock" ".cargo/" "rust-toolchain.toml")
 
-        if git diff --name-only "$BASE_COMMIT" "$HEAD_COMMIT" -- "${RUST_PATHS[@]}" | grep -q .; then
+        # Use git diff --quiet to check for changes, preserving exit status
+        git diff --quiet "$BASE_COMMIT" "$HEAD_COMMIT" -- "${RUST_PATHS[@]}"
+        EXIT_CODE=$?
+
+        if [ "$EXIT_CODE" -eq 0 ]; then
+          echo "changed=false" >> "$GITHUB_OUTPUT"
+          echo "No changes in Rust paths"
+        elif [ "$EXIT_CODE" -eq 1 ]; then
           echo "changed=true" >> "$GITHUB_OUTPUT"
           echo "Changes detected in Rust paths"
         else
-          echo "changed=false" >> "$GITHUB_OUTPUT"
-          echo "No changes in Rust paths"
+          echo "git diff failed with exit code $EXIT_CODE" >&2
+          exit "$EXIT_CODE"
         fi
