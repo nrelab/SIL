@@ -4,6 +4,7 @@
 /// - `unicode_risk`: weight 0.4
 /// - `confusable_risk`: weight 0.4
 /// - `semantic_risk`: weight 0.2
+#[derive(Debug, Clone, Copy, Default, PartialEq)]
 pub struct RiskInput {
     pub unicode_risk: f32,
     pub confusable_risk: f32,

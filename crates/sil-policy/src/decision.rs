@@ -5,7 +5,7 @@
 /// - `Warn` — input has moderate risk; flagged for review
 /// - `Block` — input has high risk and is rejected
 /// - `Rewrite(String)` — input has repairable issues; the contained string is the sanitized version
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Decision {
     Allow,
     Warn,
