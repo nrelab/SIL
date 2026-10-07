@@ -1,3 +1,4 @@
+use crate::error::SemanticError;
 use std::collections::HashSet;
 
 /// Computes a semantic similarity score between two strings using Jaccard similarity
@@ -6,9 +7,15 @@ use std::collections::HashSet;
 /// Returns a value in `[0.0, 1.0]` where:
 /// - `1.0` indicates identical token sets
 /// - `0.0` indicates no overlapping tokens
-#[must_use]
-pub fn semantic_similarity(a: &str, b: &str) -> f32 {
-    jaccard_like_score(a, b)
+///
+/// # Errors
+///
+/// Returns [`SemanticError::EmptyInput`] if either string is empty.
+pub fn semantic_similarity(a: &str, b: &str) -> Result<f32, SemanticError> {
+    if a.is_empty() || b.is_empty() {
+        return Err(SemanticError::EmptyInput);
+    }
+    Ok(jaccard_like_score(a, b))
 }
 
 #[allow(clippy::cast_precision_loss)]

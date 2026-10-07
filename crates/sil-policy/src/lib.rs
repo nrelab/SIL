@@ -8,12 +8,16 @@
 pub mod decision;
 /// Module implementing the policy evaluation logic.
 pub mod engine;
+/// Module for policy error types.
+pub mod error;
 /// Module defining risk input types and scoring functions.
 pub mod rules;
 
 pub use decision::Decision;
 pub use engine::evaluate;
+pub use error::PolicyError;
 pub use rules::{RiskInput, evaluate_risk};
+
 
 #[cfg(test)]
 mod tests {
@@ -27,7 +31,7 @@ mod tests {
             confusable_risk: 0.1,
             semantic_risk: 0.1,
         };
-        assert_eq!(evaluate(&input, "hello"), Decision::Allow);
+        assert_eq!(evaluate(&input, "hello").unwrap(), Decision::Allow);
     }
 
     #[test]
@@ -37,7 +41,7 @@ mod tests {
             confusable_risk: 0.7,
             semantic_risk: 0.0,
         };
-        let decision = evaluate(&input, "userdev");
+        let decision = evaluate(&input, "userdev").unwrap();
         assert!(matches!(decision, Decision::Warn));
     }
 
@@ -48,7 +52,7 @@ mod tests {
             confusable_risk: 0.9,
             semantic_risk: 0.5,
         };
-        assert_eq!(evaluate(&input, "\u{0440}\u{0430}ypal"), Decision::Block);
+        assert_eq!(evaluate(&input, "\u{0440}\u{0430}ypal").unwrap(), Decision::Block);
     }
 
     #[test]
@@ -58,8 +62,22 @@ mod tests {
             confusable_risk: 0.1,
             semantic_risk: 0.1,
         };
-        let decision = evaluate(&input, "\u{0192}dev");
+        let decision = evaluate(&input, "\u{0192}dev").unwrap();
         assert_eq!(decision, Decision::Rewrite("fdev".to_string()));
+    }
+
+    #[test]
+    fn test_invalid_risk_score_is_error() {
+        let input = RiskInput {
+            unicode_risk: f32::NAN,
+            confusable_risk: 0.1,
+            semantic_risk: 0.1,
+        };
+        assert!(matches!(
+            rules::evaluate_risk(&input),
+            Err(PolicyError::InvalidRiskScore { .. })
+        ));
+        assert!(evaluate(&input, "hello").is_err());
     }
 
     #[test]
@@ -69,7 +87,7 @@ mod tests {
             confusable_risk: 1.0,
             semantic_risk: 1.0,
         };
-        let score = rules::evaluate_risk(&input);
+        let score = rules::evaluate_risk(&input).unwrap();
         assert!(score > 0.8);
     }
 
@@ -80,7 +98,7 @@ mod tests {
             confusable_risk: 0.0,
             semantic_risk: 0.0,
         };
-        let score = rules::evaluate_risk(&input);
+        let score = rules::evaluate_risk(&input).unwrap();
         assert_eq!(score, 0.4);
     }
 }

@@ -1,4 +1,5 @@
 use crate::decision::Decision;
+use crate::error::PolicyError;
 use crate::rules::{RiskInput, evaluate_risk};
 
 /// Evaluates risk input against thresholds and produces a [`Decision`].
@@ -11,23 +12,27 @@ use crate::rules::{RiskInput, evaluate_risk};
 ///
 /// `original` is the raw input text, used to check for repairable issues
 /// (zero-width characters and the f-hook character).
-#[must_use]
-pub fn evaluate(input: &RiskInput, original: &str) -> Decision {
-    let score = evaluate_risk(input);
+///
+/// # Errors
+///
+/// Returns [`PolicyError::InvalidRiskScore`] if any risk dimension in
+/// `input` is NaN, infinite, or outside `0.0..=1.0`.
+pub fn evaluate(input: &RiskInput, original: &str) -> Result<Decision, PolicyError> {
+    let score = evaluate_risk(input)?;
 
     if score > 0.8 {
-        return Decision::Block;
+        return Ok(Decision::Block);
     }
 
     if score > 0.5 {
-        return Decision::Warn;
+        return Ok(Decision::Warn);
     }
 
     if contains_repairable_issue(original) {
-        return Decision::Rewrite(sanitize(original));
+        return Ok(Decision::Rewrite(sanitize(original)));
     }
 
-    Decision::Allow
+    Ok(Decision::Allow)
 }
 
 fn contains_repairable_issue(input: &str) -> bool {

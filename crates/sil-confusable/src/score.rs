@@ -1,3 +1,4 @@
+use crate::error::ConfusableError;
 use crate::targets::COMMON_TARGETS;
 use crate::unicode_map::to_ascii_equivalent;
 
@@ -9,8 +10,14 @@ use crate::unicode_map::to_ascii_equivalent;
 /// - Obfuscation patterns (digit + letter mixing): 0.2
 ///
 /// The score is clamped to a maximum of 1.0.
-#[must_use]
-pub fn confusable_score(input: &str) -> f32 {
+///
+/// # Errors
+///
+/// Returns [`ConfusableError::EmptyInput`] if `input` is empty.
+pub fn confusable_score(input: &str) -> Result<f32, ConfusableError> {
+    if input.is_empty() {
+        return Err(ConfusableError::EmptyInput);
+    }
     let mut score: f32 = 0.0;
 
     if contains_multiple_scripts(input) {
@@ -25,7 +32,7 @@ pub fn confusable_score(input: &str) -> f32 {
         score += 0.2;
     }
 
-    score.min(1.0)
+    Ok(score.min(1.0))
 }
 
 fn contains_multiple_scripts(input: &str) -> bool {

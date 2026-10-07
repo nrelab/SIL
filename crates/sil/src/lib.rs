@@ -6,10 +6,10 @@
 #![doc = "sub-crates."]
 
 /// Detect confusable Unicode patterns and compute risk scores.
-pub use sil_confusable::{confusable_score, detect_confusables, to_ascii_equivalent};
+pub use sil_confusable::{ConfusableError, confusable_score, detect_confusables, to_ascii_equivalent};
 /// Normalize Unicode input and scan for suspicious patterns.
-pub use sil_normalizer::{normalize_input, scan_input};
+pub use sil_normalizer::{NormalizerError, normalize_input, scan_input};
 /// Evaluate risk and make policy decisions.
-pub use sil_policy::{Decision, RiskInput, evaluate, evaluate_risk};
+pub use sil_policy::{Decision, PolicyError, RiskInput, evaluate, evaluate_risk};
 /// Compute semantic similarity and cluster intents.
-pub use sil_semantic::{cluster_intents, semantic_similarity};
+pub use sil_semantic::{SemanticError, cluster_intents, semantic_similarity};
