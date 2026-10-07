@@ -13,6 +13,7 @@ pub mod rules;
 
 pub use decision::Decision;
 pub use engine::evaluate;
+pub use rules::{RiskInput, evaluate_risk};
 
 #[cfg(test)]
 mod tests {

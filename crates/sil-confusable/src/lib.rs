@@ -16,6 +16,7 @@ pub mod targets;
 
 pub use detector::detect_confusables;
 pub use score::confusable_score;
+pub use unicode_map::to_ascii_equivalent;
 
 #[cfg(test)]
 mod tests {

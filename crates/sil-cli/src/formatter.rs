@@ -6,7 +6,7 @@ use sil_policy::Decision;
 /// - `Warn` → 🟡 WARNING
 /// - `Block` → 🔴 BLOCKED
 /// - `Rewrite(s)` → 🔧 REWRITE → {s}
-pub fn format_decision(decision: &Decision) -> String {
+pub(crate) fn format_decision(decision: &Decision) -> String {
     match decision {
         Decision::Allow => "\u{1F7E2} SAFE".to_string(),
         Decision::Warn => "\u{1F7E1} WARNING".to_string(),
