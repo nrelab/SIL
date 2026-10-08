@@ -64,7 +64,7 @@ jobs:
         run: ruff check .
 
       - name: Mypy
-        run: mypy api/ worker/ ai-agent/ integrations/ dashboard/
+        run: mypy api/ worker/ ai_agent/ integrations/ dashboard/
 
   coverage:
     name: Code Coverage

@@ -1,4 +1,10 @@
-def predict_risk(events: list[dict]) -> float:
+"""predictor package."""
+
+from typing import Any
+
+
+def predict_risk(events: list[dict[str, Any]]) -> float:
+    """Predict a risk score from events."""
     score = 0.0
 
     for e in events:

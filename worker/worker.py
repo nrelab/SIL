@@ -1,15 +1,16 @@
-import json
+"""worker package."""
+
 import os
 import time
-
-import redis
+from typing import Any
 
 from sil_queue import SilQueue
 
 REDIS_HOST = os.getenv("REDIS_HOST", "redis")
 
 
-def process_job(job: dict) -> dict:
+def process_job(job: dict[str, Any]) -> dict[str, Any]:
+    """Process job."""
     text = job.get("input", "")
 
     normalized = text
@@ -34,6 +35,7 @@ def process_job(job: dict) -> dict:
 
 
 def main() -> None:
+    """Run the worker loop."""
     q = SilQueue(host=REDIS_HOST)
     print(f"Worker listening on queue '{q.queue_name}'...")
 

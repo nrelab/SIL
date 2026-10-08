@@ -1,9 +1,12 @@
-from typing import Optional
+"""metrics package."""
+
+from typing import Any, Optional
 
 from backend.collector import get_events
 
 
-def compute_metrics(events: Optional[list[dict]] = None) -> dict:
+def compute_metrics(events: Optional[list[dict[str, Any]]] = None) -> dict[str, Any]:
+    """Compute metrics."""
     if events is None:
         events = get_events()
 

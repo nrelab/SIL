@@ -1,4 +1,7 @@
+"""refactor_advisor package."""
+
 def suggest_refactor(name: str) -> str:
+    """Suggest a refactor for the given name."""
     if "login" in name and "auth" in name:
         return "Consider merging login/auth modules"
 

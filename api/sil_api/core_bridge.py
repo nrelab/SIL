@@ -1,12 +1,14 @@
-"""
-Rust SIL Engine bridge layer.
+"""Rust SIL Engine bridge layer.
 
 Currently uses a simulated pipeline. Replace with actual FFI
 (e.g. PyO3 / ctypes) once the Rust core is compiled as a shared library.
 """
 
+from typing import Any
 
-def run_sil_pipeline(text: str) -> dict:
+
+def run_sil_pipeline(text: str) -> dict[str, Any]:
+    """Run sil pipeline."""
     # Step 1: Normalize (Rust call placeholder)
     normalized = text
 
