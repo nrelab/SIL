@@ -1,4 +1,10 @@
-def analyze_pr(diff_text: str) -> dict:
+"""analyzer package."""
+
+from typing import Any
+
+
+def analyze_pr(diff_text: str) -> dict[str, Any]:
+    """Analyze a PR diff for issues."""
     issues: list[str] = []
 
     if "\u0192" in diff_text:
