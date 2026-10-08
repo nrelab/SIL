@@ -11,6 +11,7 @@ from backend.collector import EVENTS
 from backend.metrics import compute_metrics
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 app = FastAPI(title="SIL Dashboard API")
 
@@ -40,10 +41,17 @@ def events() -> dict[str, Any]:
     return {"events": EVENTS}
 
 
+class IngestRequest(BaseModel):
+    """IngestRequest class."""
+
+    event_type: str
+    payload: dict[str, Any]
+
+
 @app.post("/ingest")
-def ingest(event_type: str, payload: dict[str, Any]) -> dict[str, str]:
+def ingest(req: IngestRequest) -> dict[str, str]:
     """Ingest."""
     from backend.collector import collect_event
 
-    collect_event(event_type, payload)
+    collect_event(req.event_type, req.payload)
     return {"status": "ingested"}

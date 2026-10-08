@@ -10,14 +10,18 @@ on:
 
 permissions:
   contents: read
-  security-events: write
 
 jobs:
   cargo-audit:
     name: RustSec Advisory Audit
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      issues: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -32,6 +36,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -50,6 +56,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          persist-credentials: false
           fetch-depth: 0
 
       - name: Gitleaks
@@ -59,15 +66,29 @@ jobs:
             detect --source /src --redact --verbose --exit-code 1
 
   trivy:
-    name: Trivy Filesystem Scan
+    name: Trivy Container Image Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
-      - name: Trivy vulnerability scan
+      - name: Build api image
+        run: docker build -f deploy/docker/api/Dockerfile -t sil/api:scan .
+
+      - name: Build worker image
+        run: docker build -f deploy/docker/worker/Dockerfile -t sil/worker:scan .
+
+      - name: Trivy scan (api image)
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          scan-type: fs
-          scan-ref: .
+          image-ref: sil/api:scan
+          severity: CRITICAL,HIGH
+          exit-code: "1"
+
+      - name: Trivy scan (worker image)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: sil/worker:scan
           severity: CRITICAL,HIGH
           exit-code: "1"

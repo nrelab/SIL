@@ -1,9 +1,9 @@
 """scan package."""
 
-from typing import Any
-
 from fastapi import APIRouter
 from pydantic import BaseModel
+
+from sil_api.core_bridge import PipelineResult
 
 router = APIRouter()
 
@@ -14,10 +14,10 @@ class ScanRequest(BaseModel):
     input: str
 
 
-@router.post("")
-def scan(req: ScanRequest) -> dict[str, Any]:
+@router.post("", response_model=PipelineResult)
+def scan(req: ScanRequest) -> PipelineResult:
     """Scan."""
     from sil_api.core_bridge import run_sil_pipeline
 
     result = run_sil_pipeline(req.input)
-    return result
+    return PipelineResult(**result)

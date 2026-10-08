@@ -6,6 +6,18 @@ Currently uses a simulated pipeline. Replace with actual FFI
 
 from typing import Any
 
+from pydantic import BaseModel
+
+
+class PipelineResult(BaseModel):
+    """Typed response shape for a SIL pipeline run."""
+
+    input: str
+    normalized: str
+    flags: list[str]
+    semantic_score: float
+    decision: str
+
 
 def run_sil_pipeline(text: str) -> dict[str, Any]:
     """Run sil pipeline."""

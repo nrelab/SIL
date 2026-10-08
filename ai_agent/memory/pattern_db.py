@@ -1,6 +1,5 @@
 """pattern_db package."""
 
-from typing import Any
 
 PATTERN_DB: dict[str, int] = {}
 
@@ -12,7 +11,7 @@ def record_pattern(pattern: str) -> None:
 
 def get_patterns() -> dict[str, int]:
     """Get patterns."""
-    return dict[str, Any](PATTERN_DB)
+    return dict(PATTERN_DB)
 
 
 def clear_patterns() -> None:
