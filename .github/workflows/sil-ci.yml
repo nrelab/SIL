@@ -58,7 +58,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install linting tools
-        run: pip install ruff mypy
+        run: pip install ruff mypy fastapi uvicorn pydantic redis
 
       - name: Ruff lint
         run: ruff check .
