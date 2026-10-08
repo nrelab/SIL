@@ -29,7 +29,10 @@ class SilQueue:
 
     def dequeue(self) -> dict[str, Any] | None:
         """Dequeue."""
-        _, data = self.client.blpop(self.queue_name, timeout=1)
+        result = self.client.blpop(self.queue_name, timeout=1)
+        if result is None:
+            return None
+        _, data = result
         if data:
             return cast(dict[str, Any], json.loads(data))
         return None
