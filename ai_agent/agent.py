@@ -1,13 +1,19 @@
-from memory.event_store import get_recent_events, store_event
-from reasoning.predictor import predict_risk
-from reasoning.analyzer import detect_pattern
+"""agent package."""
+
+from typing import Any
+
 from actions.fix_suggester import suggest_fix
 from actions.refactor_advisor import suggest_refactor
+from memory.event_store import get_recent_events, store_event
+from reasoning.analyzer import detect_pattern
+from reasoning.predictor import predict_risk
 
 
 class SILAgent:
+    """SILAgent class."""
 
-    def analyze(self, input_text: str) -> dict:
+    def analyze(self, input_text: str) -> dict[str, Any]:
+        """Analyze."""
         store_event({"type": "INPUT_RECEIVED", "input": input_text})
 
         events = get_recent_events()

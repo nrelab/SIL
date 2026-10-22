@@ -1,4 +1,10 @@
-def audit_repository(files: list) -> dict:
+"""audit package."""
+
+from typing import Any
+
+
+def audit_repository(files: list[str]) -> dict[str, Any]:
+    """Audit a repository file list."""
     report = {
         "total_files": len(files),
         "unicode_risks": 0,

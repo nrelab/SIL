@@ -1,9 +1,13 @@
+"""collector package."""
+
 import time
+from typing import Any
 
-EVENTS: list[dict] = []
+EVENTS: list[dict[str, Any]] = []
 
 
-def collect_event(event_type: str, payload: dict) -> None:
+def collect_event(event_type: str, payload: dict[str, Any]) -> None:
+    """Collect event."""
     EVENTS.append({
         "type": event_type,
         "payload": payload,
@@ -11,9 +15,11 @@ def collect_event(event_type: str, payload: dict) -> None:
     })
 
 
-def get_events() -> list[dict]:
+def get_events() -> list[dict[str, Any]]:
+    """Get events."""
     return EVENTS
 
 
 def clear_events() -> None:
+    """Clear events."""
     EVENTS.clear()

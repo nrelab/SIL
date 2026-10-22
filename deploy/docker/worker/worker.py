@@ -1,9 +1,10 @@
+"""worker package."""
+
 import json
 import os
 import time
 
 import redis
-
 from core_bridge import run_sil_pipeline
 
 REDIS_HOST = os.getenv("REDIS_HOST", "redis")
@@ -13,12 +14,14 @@ r = redis.Redis(host=REDIS_HOST, decode_responses=True)
 
 
 def process_job(job: dict) -> None:
+    """Process job."""
     result = run_sil_pipeline(job["input"])
     r.set(f"sil_result:{job['id']}", json.dumps(result))
     print(f"Processed job {job['id']}: {result['decision']}")
 
 
 def main() -> None:
+    """Run the worker loop."""
     print(f"Worker listening on Redis queue '{QUEUE_NAME}'...")
     while True:
         try:

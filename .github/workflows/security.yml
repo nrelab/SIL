@@ -1,0 +1,96 @@
+name: Security Scanning
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  cargo-audit:
+    name: RustSec Advisory Audit
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: cargo-audit
+        uses: rustsec/audit-check@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  cargo-deny:
+    name: cargo-deny (licenses, bans, sources)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install cargo-deny
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-deny
+
+      - name: Check advisories, licenses, bans, sources
+        run: cargo deny check
+
+  secrets:
+    name: Gitleaks Secret Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Gitleaks
+        run: |
+          docker run --rm -v "${{ github.workspace }}:/src" \
+            zricethezav/gitleaks:v8.24.3 \
+            detect --source /src --redact --verbose --exit-code 1
+
+  trivy:
+    name: Trivy Container Image Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Build api image
+        run: docker build -f deploy/docker/api/Dockerfile -t sil/api:scan .
+
+      - name: Build worker image
+        run: docker build -f deploy/docker/worker/Dockerfile -t sil/worker:scan .
+
+      - name: Trivy scan (api image)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: sil/api:scan
+          severity: CRITICAL,HIGH
+          exit-code: "1"
+          ignore-unfixed: true
+
+      - name: Trivy scan (worker image)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: sil/worker:scan
+          severity: CRITICAL,HIGH
+          exit-code: "1"
+          ignore-unfixed: true
